@@ -8,7 +8,7 @@
 </head>
 <body>
 
-```
+
 <h1>✈️ Flight Ticket Booking System</h1>
 
 <p>
@@ -80,7 +80,7 @@
 <h2>📂 Project Structure</h2>
 
 <pre>
-```
+
 
 Flight-ticket-booking/
 │
@@ -102,7 +102,7 @@ Flight-ticket-booking/
 │
 └── README.html </pre>
 
-```
+
 <hr>
 
 <h2>⚙️ Setup Instructions</h2>
@@ -110,11 +110,11 @@ Flight-ticket-booking/
 <h3>1️⃣ Clone Repository</h3>
 
 <pre>
-```
+
 
 git clone [https://github.com/Sumit-Kumar-1999/Flight-ticket-booking.git](https://github.com/Sumit-Kumar-1999/Flight-ticket-booking.git) </pre>
 
-```
+
 <h3>2️⃣ Open Project</h3>
 
 <p>Import the project into:</p>
@@ -126,45 +126,45 @@ git clone [https://github.com/Sumit-Kumar-1999/Flight-ticket-booking.git](https:
 <h3>3️⃣ Configure Database</h3>
 
 <pre>
-```
+
 
 CREATE DATABASE flight_booking; </pre>
 
-```
+
 <p>Update database configuration in:</p>
 
 <pre>
-```
+
 
 application.properties </pre>
 
-```
+
 <p>Example:</p>
 
 <pre>
-```
+
 
 spring.datasource.url=jdbc:postgresql://localhost:5432/flight_booking
 spring.datasource.username=postgres
 spring.datasource.password=your_password </pre>
 
-```
+
 <h3>4️⃣ Run Application</h3>
 
 <pre>
-```
+
 
 Run As → Spring Boot App </pre>
 
-```
+
 <p>OR using terminal:</p>
 
 <pre>
-```
+
 
 mvn spring-boot:run </pre>
 
-```
+
 <hr>
 
 <h2>🔗 API Modules</h2>
@@ -195,14 +195,14 @@ mvn spring-boot:run </pre>
 <h2>🛠️ Git Commands Used</h2>
 
 <pre>
-```
+
 
 git status
 git add .
 git commit -m "Updated project"
 git push origin main </pre>
 
-```
+
 <hr>
 
 <h2>👨‍💻 Author</h2>
@@ -237,7 +237,7 @@ git push origin main </pre>
 <p>
     This project is developed for learning and educational purposes.
 </p>
-```
+
 
 </body>
 </html>
