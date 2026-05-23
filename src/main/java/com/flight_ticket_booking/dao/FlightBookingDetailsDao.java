@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import com.flight_ticket_booking.connection.FlightConnection;
 import com.flight_ticket_booking.dto.FlightBookingDetails;

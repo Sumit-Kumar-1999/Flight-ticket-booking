@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import com.mysql.cj.jdbc.Driver;
 
+
 public class FlightConnection 
 {
 	public static Connection getFllightConnection()
@@ -15,7 +16,7 @@ public class FlightConnection
 		DriverManager.registerDriver(driver);
 		String url = "jdbc:mysql://localhost:3306/flight-booking";
 		String user = "root";
-		String pass = "Sumit@1202";
+		String pass = "root123";
 		return DriverManager.getConnection(url, user, pass);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -24,3 +25,8 @@ public class FlightConnection
 		return null;	
 	}
 }
+
+
+
+
+

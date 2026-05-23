@@ -1,247 +1,533 @@
+<%@page import="jakarta.servlet.http.HttpSession"%>
 <%@page import="com.flight_ticket_booking.dto.AdminAddFlight"%>
 <%@page import="java.util.List"%>
 <%@page import="com.flight_ticket_booking.dao.AdminAddFlightDao"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
+
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+
+<title>AirGo Flight Search</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <style>
-         * {
-            box-sizing: border-box;
-            margin: 0px;
-            padding: 0px;
-            text-decoration: none;
-            list-style: none;
-            /* border: 1px solid; */
-        }
-        body{
-           width: 100%;
-        }
-        .logo{
-            display: inline-block;
-            background-image: url("image/airplane-icon-png-22.png");
-            height: 50px;
-            width: 50px;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: contain;
-            padding: 0 60px;
-            margin-top: 5px;
-        }
-        nav{
-            background-color: aqua;
-            position: absolute;
-            height: 62px;
-            width: 100%;
-        }
-        nav ul{
-            float: right;
-            margin-right: 20px;
-        }
-        nav ul li{
-            display: inline-block;
-            line-height: 60px;
-            margin: 0 15px;
-            font-size: 22px;
-            
-        }
-        a{
-            padding: 4px 5px;
-            border-radius: 5px;
-            /* color: aliceblue; */
-        }
-        li a:hover{
-            background: rgb(65, 255, 81);
-            transition: 1s;
-        }
-        table{
-            position: relative;
-            top: 65px;
-            border-spacing: 0;
-            border-collapse: collapse;
-            border: 1px solid #DDEEEE;
-        }
-        table thead th{
-            width: 350px;
-            background-color: rgba(174, 255, 255, 0.495);
-            border: 1px solid #DDEEEE;
-            color: #000000;
-            padding: 10px 1px;
-            font-size: 20px;
-        }
-        table tbody td{
-            border: 1px solid #DDEEEE;
-            color: #000000;
-            text-align: center;
-        }
-        table tbody tr:nth-child(odd){
-            background-color: #fff;
-        }
-        table tbody tr:nth-child(even){
-            background-color: #EEF7EE;
-        }
-        table tbody td{
-            border-left: none;
-            border-right: none;
-        }
-        button{
-            cursor: pointer;
-            padding: 3px 4px;
-        }
-        .book{
-            background-color: rgb(77, 255, 77);
-            border: none;
-            width: 90px;
-            border-radius: 3px;
-            padding: 5px 8px;
-            color: white;
-            font-size: 15px;
-        }
-        .img{
-            width: 100%;
-            height: 50px;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            border-radius: 10px;
-        }
-    </style>
+@import
+	url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap')
+	;
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Poppins', sans-serif;
+}
+
+body {
+	min-height: 100vh;
+	overflow-x: auto;
+	background: linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.88)),
+		url("image/AirGo.jpg");
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	color: white;
+	position: relative;
+}
+
+/* Neon Animated Background */
+body::before {
+	content: "";
+	position: fixed;
+	width: 450px;
+	height: 450px;
+	background: linear-gradient(#00e5ff, #0072ff);
+	border-radius: 50%;
+	filter: blur(180px);
+	top: -120px;
+	left: -120px;
+	opacity: 0.25;
+	animation: move1 8s infinite alternate;
+}
+
+body::after {
+	content: "";
+	position: fixed;
+	width: 400px;
+	height: 400px;
+	background: linear-gradient(#ff00ff, #7b2ff7);
+	border-radius: 50%;
+	filter: blur(180px);
+	bottom: -120px;
+	right: -120px;
+	opacity: 0.20;
+	animation: move2 8s infinite alternate;
+}
+
+@
+keyframes move1 { 100%{
+	transform: translateY(60px) translateX(40px);
+}
+
+}
+@
+keyframes move2 { 100%{
+	transform: translateY(-50px) translateX(-40px);
+}
+
+}
+
+/* Navbar */
+nav {
+	width: 100%;
+	height: 80px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 50px;
+	position: fixed;
+	top: 0;
+	z-index: 1000;
+	background: rgba(255, 255, 255, 0.08);
+	backdrop-filter: blur(15px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Logo */
+.logo-section {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+
+.logo {
+	width: 60px;
+	height: 60px;
+	background-image: url("image/airplane-icon-png-22.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	transition: 0.5s;
+}
+
+.logo:hover {
+	transform: rotate(-15deg) scale(1.08);
+}
+
+.logo-text {
+	font-size: 30px;
+	font-weight: 700;
+	letter-spacing: 2px;
+}
+
+/* Navbar Links */
+nav ul {
+	display: flex;
+	gap: 20px;
+}
+
+nav ul li {
+	list-style: none;
+}
+
+nav ul li a {
+	text-decoration: none;
+	color: white;
+	font-size: 16px;
+	font-weight: 500;
+	padding: 10px 22px;
+	border-radius: 30px;
+	transition: 0.4s;
+}
+
+nav ul li a:hover {
+	background: rgba(255, 255, 255, 0.15);
+	box-shadow: 0 0 18px rgba(0, 229, 255, 0.4);
+}
+
+/* Main Section */
+.main-container {
+	width: 95%;
+	margin: auto;
+	padding-top: 120px;
+	padding-bottom: 40px;
+	position: relative;
+	z-index: 2;
+}
+
+/* Search Info */
+.search-header {
+	margin-bottom: 35px;
+}
+
+.search-header h1 {
+	font-size: 42px;
+	margin-bottom: 10px;
+}
+
+.search-header p {
+	color: #d4d4d4;
+	font-size: 16px;
+}
+
+/* Table Container */
+.table-container {
+	width: 100%;
+	overflow-x: auto;
+	border-radius: 25px;
+	background: rgba(255, 255, 255, 0.08);
+	backdrop-filter: blur(18px);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 0 10px
+		rgba(255, 255, 255, 0.04);
+	padding: 20px;
+	animation: fadeUp 1s ease;
+}
+
+@
+keyframes fadeUp {from { opacity:0;
+	transform: translateY(60px);
+}
+
+to {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+}
+
+/* Table */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 1300px;
+}
+
+thead tr {
+	background: rgba(255, 255, 255, 0.10);
+}
+
+thead th {
+	padding: 18px 15px;
+	font-size: 15px;
+	font-weight: 600;
+	color: #00e5ff;
+	text-align: center;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tbody tr {
+	transition: 0.4s;
+}
+
+tbody tr:hover {
+	background: rgba(255, 255, 255, 0.08);
+	transform: scale(1.01);
+}
+
+tbody td {
+	padding: 18px 12px;
+	text-align: center;
+	color: #f2f2f2;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Flight Logo */
+.flight-logo {
+	width: 90px;
+	height: 50px;
+	object-fit: cover;
+	border-radius: 12px;
+	box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Book Button */
+.book-btn {
+	border: none;
+	outline: none;
+	padding: 12px 20px;
+	border-radius: 14px;
+	background: linear-gradient(135deg, #00e676, #00c853);
+	color: white;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 600;
+	transition: 0.4s;
+	box-shadow: 0 0 18px rgba(0, 230, 118, 0.3);
+}
+
+.book-btn:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 0 22px rgba(0, 230, 118, 0.6);
+}
+
+/* Price */
+.price {
+	color: #00ffcc;
+	font-weight: 600;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	height: 8px;
+	width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #00e5ff;
+	border-radius: 20px;
+}
+
+/* Responsive */
+@media ( max-width :900px) {
+	nav {
+		padding: 0 20px;
+	}
+	.search-header h1 {
+		font-size: 32px;
+	}
+	.logo-text {
+		font-size: 24px;
+	}
+}
+
+/* Back Home Button */
+.back-home {
+	position: fixed;
+	bottom: 25px;
+	left: 25px;
+	z-index: 9999;
+	text-decoration: none;
+	padding: 14px 22px;
+	border-radius: 18px;
+	background: rgba(255, 255, 255, 0.10);
+	backdrop-filter: blur(15px);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: white;
+	font-size: 15px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	transition: 0.4s;
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+/* Hover Effect */
+.back-home:hover {
+	background: linear-gradient(135deg, #00e5ff, #0072ff);
+	transform: translateY(-4px);
+	box-shadow: 0 0 22px rgba(0, 229, 255, 0.6);
+}
+</style>
+
 </head>
+
 <body>
-<%
+
+	<!-- Back To Home Button -->
+
+	<a href="home.jsp" class="back-home"> &#8592; Back </a>
+
+	<%
 	HttpSession httpSession = request.getSession();
-	String email = (String)httpSession.getAttribute("email");
-%>
+
+	String email = (String) httpSession.getAttribute("email");
+	%>
+
+	<!-- Navbar -->
+
 	<header>
-        <nav class="navbar">
-            <span class="logo"></span>
-            <ul>
-                <li><a href="home.jsp">Home</a></li>
-                <%if(email!=null){ %>
-                <li><a href="userLogout">Logout</a></li>
-                <%}else{ %>
-                <li><a href="user-login.jsp">Login</a></li>
-                <%} %>
-            </ul>
-        </nav>
-    </header>
+
+		<nav>
+
+			<div class="logo-section">
+
+				<div class="logo"></div>
+
+				<div class="logo-text">AirGo</div>
+
+			</div>
+
+			<ul>
+
+				<li><a href="home.jsp"> Home </a></li>
+
+				<%
+				if (email != null) {
+				%>
+
+				<li><a href="userLogout"> Logout </a></li>
+
+				<%
+				} else {
+				%>
+
+				<li><a href="user-login.jsp"> Login </a></li>
+
+				<%
+				}
+				%>
+
+			</ul>
+
+		</nav>
+
+	</header>
+
+	<!-- Flight Data -->
+
 	<%
 	String source = request.getParameter("source");
+
 	String destination = request.getParameter("destination");
+
 	String date = request.getParameter("date");
+
 	AdminAddFlightDao addFlightDao = new AdminAddFlightDao();
+
 	List<AdminAddFlight> addFlights = addFlightDao.getFlightBySourceToDestination(source, destination);
 	%>
-	<div>
-        <table>
-            <thead>
-                <tr>
-                    <th>LoGo</th>
-                    <th>Number</th>
-                    <th>Name</th>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Departure</th>
-                    <th>Arrival</th>
-                    <th>EcoPrice</th>
-                    <th>BusiPrice</th>
-                    <th>Date</th>
-                    <th>Book</th>
-                </tr>
-            </thead>
-			<%
-			for (AdminAddFlight addFlight : addFlights) {
-			%>
-			<%
-			if (addFlight.getFlightName().equalsIgnoreCase("indigo")) {
-			%>
-			<tbody>
-			<tr>
-				<td><img alt="indigo"
-					src="image/IndiGo_Airlines_logo.svg.png" class="img"></td>
-				<td><%=addFlight.getFlightNum()%></td>
-				<td><%=addFlight.getFlightName()%></td>
-				<td><%=addFlight.getSource()%></td>
-				<td><%=addFlight.getDestination()%></td>
-				<td><%=addFlight.getDepTime()%></td>
-				<td><%=addFlight.getArrTime()%></td>
-				<td><%=addFlight.getEcoPrice()%></td>
-				<td><%=addFlight.getBusiPrice()%></td>
-				<td><%=date%></td>
-				<td><a
-					href="userBookOrLogin?flightNumber=<%=addFlight.getFlightNum()%>"><button class="book">BookTicket</button></a></td>
-			</tr>
-			<%
-			}
-			%>
-			<%
-			if (addFlight.getFlightName().equalsIgnoreCase("AirGo")) {
-			%>
-			<tr>
-				<td><img alt="AirGo"
-					src="image/AirGo.jpg" class="img"></td>
-				<td><%=addFlight.getFlightNum()%></td>
-				<td><%=addFlight.getFlightName()%></td>
-				<td><%=addFlight.getSource()%></td>
-				<td><%=addFlight.getDestination()%></td>
-				<td><%=addFlight.getDepTime()%></td>
-				<td><%=addFlight.getArrTime()%></td>
-				<td><%=addFlight.getEcoPrice()%></td>
-				<td><%=addFlight.getBusiPrice()%></td>
-				<td><%=date%></td>
-				<td><a
-					href="userBookOrLogin?flightNumber=<%=addFlight.getFlightNum()%>"><button class="book">BookTicket</button></a></td>
-			</tr>
-			<%
-			}
-			%>
-			<%
-			if (addFlight.getFlightName().equalsIgnoreCase("AirIndia")) {
-			%>
-			<tr>
-				<td><img alt="AirIndia"
-					src="image/Air India.jpg" class="img"></td>
-				<td><%=addFlight.getFlightNum()%></td>
-				<td><%=addFlight.getFlightName()%></td>
-				<td><%=addFlight.getSource()%></td>
-				<td><%=addFlight.getDestination()%></td>
-				<td><%=addFlight.getDepTime()%></td>
-				<td><%=addFlight.getArrTime()%></td>
-				<td><%=addFlight.getEcoPrice()%></td>
-				<td><%=addFlight.getBusiPrice()%></td>
-				<td><%=date%></td>
-				<td><a
-					href="userBookOrLogin?flightNumber=<%=addFlight.getFlightNum()%>"><button class="book">BookTicket</button></a></td>
-			</tr>
-			<%
-			}
-			%>
-			<%
-			if (addFlight.getFlightName().equalsIgnoreCase("Vistara")) {
-			%>
-			<tr>
-				<td><img alt="Vistara"
-					src="image/vistara.jpg" class="img"></td>
-				<td><%=addFlight.getFlightNum()%></td>
-				<td><%=addFlight.getFlightName()%></td>
-				<td><%=addFlight.getSource()%></td>
-				<td><%=addFlight.getDestination()%></td>
-				<td><%=addFlight.getDepTime()%></td>
-				<td><%=addFlight.getArrTime()%></td>
-				<td><%=addFlight.getEcoPrice()%></td>
-				<td><%=addFlight.getBusiPrice()%></td>
-				<td><%=date%></td>
-				<td><a
-					href="userBookOrLogin?flightNumber=<%=addFlight.getFlightNum()%>"><button class="book">BookTicket</button></a></td>
-			</tr>
-			<%
-			}}
-			%>
-			</tbody>
-		</table>
+
+	<!-- Main Container -->
+
+	<div class="main-container">
+
+		<!-- Heading -->
+
+		<div class="search-header">
+
+			<h1>Available Flights</h1>
+
+			<p>
+
+				Showing flights from <b><%=source%></b> to <b><%=destination%></b>
+				on <b><%=date%></b>
+
+			</p>
+
+		</div>
+
+		<!-- Table -->
+
+		<div class="table-container">
+
+			<table>
+
+				<thead>
+
+					<tr>
+
+						<th>Airline</th>
+						<th>Flight No</th>
+						<th>Flight Name</th>
+						<th>Source</th>
+						<th>Destination</th>
+						<th>Departure</th>
+						<th>Arrival</th>
+						<th>Economy</th>
+						<th>Business</th>
+						<th>Date</th>
+						<th>Book</th>
+
+					</tr>
+
+				</thead>
+
+				<tbody>
+
+					<%
+					for (AdminAddFlight addFlight : addFlights) {
+
+						String image = "";
+
+						if (addFlight.getFlightName().equalsIgnoreCase("IndiGo Airlines")) {
+							image = "image/IndiGo_Airlines_logo.svg.png";
+						}
+
+						else if (addFlight.getFlightName().equalsIgnoreCase("Air Go")) {
+							image = "image/AirGo.jpg";
+						}
+
+						else if (addFlight.getFlightName().equalsIgnoreCase("Air India")) {
+							image = "image/Air India.jpg";
+						}
+
+						else if (addFlight.getFlightName().equalsIgnoreCase("Vistara Airways")) {
+							image = "image/vistara.jpg";
+						}
+						
+						else if(addFlight.getFlightName().equalsIgnoreCase("Air India Express")){
+							image = "image/Air india express.png";
+						}
+						
+						else if(addFlight.getFlightName().equalsIgnoreCase("SpiceJet")){
+							image = "image/spice jet.png";
+						}
+						
+						else if(addFlight.getFlightName().equalsIgnoreCase("AirAsia India")){
+							image = "image/Air Asia.png";
+						}
+					%>
+
+					<tr>
+
+						<!-- Airline Logo  -->
+
+						<td><img src="<%=image%>" class="flight-logo"></td>
+
+						<!-- Flight Details -->
+
+						<td><%=addFlight.getFlightNum()%></td>
+
+						<td><%=addFlight.getFlightName()%></td>
+
+						<td><%=addFlight.getSource()%></td>
+
+						<td><%=addFlight.getDestination()%></td>
+
+						<td><%=addFlight.getDepTime()%></td>
+
+						<td><%=addFlight.getArrTime()%></td>
+
+						<td class="price">&#8377; <%=addFlight.getEcoPrice()%>
+
+						</td>
+
+						<td class="price">&#8377; <%=addFlight.getBusiPrice()%>
+
+						</td>
+
+						<td><%=date%></td>
+
+						<!-- Book -->
+
+						<td><a
+							href="userBookOrLogin?flightNumber=<%=addFlight.getFlightNum()%>">
+
+								<button class="book-btn">Book Ticket</button>
+
+						</a></td>
+
+					</tr>
+
+					<%
+					}
+					%>
+
+				</tbody>
+
+			</table>
+
+		</div>
+
 	</div>
+
 </body>
+
 </html>
