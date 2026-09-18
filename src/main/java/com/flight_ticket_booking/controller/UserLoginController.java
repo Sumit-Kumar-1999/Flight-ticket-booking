@@ -26,23 +26,23 @@ public class UserLoginController extends HttpServlet
 		UserService service = new UserService();
 		User user = service.getUserByEmail(email);
 		if(user!=null)
-		{
-			if(password.equals(user.getPassword()))
-			{
-				httpSession.setAttribute("email", user.getEmail());
-				RequestDispatcher dispatcher = req.getRequestDispatcher("home.jsp");
-				dispatcher.forward(req, resp);
-			}
-			else
-			{
-				req.setAttribute("pmsg", "invalid password");
-				RequestDispatcher dispatcher = req.getRequestDispatcher("user-login.jsp");
-				dispatcher.forward(req, resp);
-			}
+                {
+                    if(password.equals(user.getPassword()))
+                    {
+                        httpSession.setAttribute("email", user.getEmail());
+                        RequestDispatcher dispatcher = req.getRequestDispatcher("home.jsp");
+                        dispatcher.forward(req, resp);
+                    }
+                    else
+                    {
+                        req.setAttribute("pmsg", "invalid password");
+                        RequestDispatcher dispatcher = req.getRequestDispatcher("user-login.jsp");
+                        dispatcher.forward(req, resp);
+                    }
 		}else {
 			req.setAttribute("emsg", "invalid Email");
 			RequestDispatcher dispatcher = req.getRequestDispatcher("user-login.jsp");
 			dispatcher.forward(req, resp);
-		}
+                }
 	}
 }
